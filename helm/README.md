@@ -9,9 +9,6 @@ This guide explains how to deploy a Helm-based Kubernetes application manually a
 cinny-k8s-app/
 └── helm/ # Helm chart created using helm create . inside this folder
 
-yaml
-Copy
-Edit
 
 ---
 
@@ -32,16 +29,11 @@ Edit
 ```bash
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 Deploy the app manually using Helm
-bash
-Copy
-Edit
+
 cd helm
 helm install cinny-release .
 Verify the deployment:
 
-bash
-Copy
-Edit
 helm list
 kubectl get pods
 kubectl get svc
@@ -49,9 +41,6 @@ kubectl get svc
 1. Log in to Argo CD UI
 Access the Argo CD web interface, usually at:
 
-cpp
-Copy
-Edit
 https://localhost:8080 (via port-forward)
 or
 http://<node-ip>:<node-port> (if exposed via NodePort)
@@ -85,9 +74,6 @@ You can also set Auto-Sync if desired
 🧹 To Delete the Helm App
 From CLI (manual install):
 
-bash
-Copy
-Edit
 helm uninstall cinny-release
 From Argo CD:
 
