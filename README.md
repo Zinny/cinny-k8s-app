@@ -80,6 +80,5 @@ minikube service list
 🧹 Cleanup (if needed)
 minikube stop
 minikube delete
-minikube dashboard
 
 Maintained by: 👩‍💻 Cinny
