@@ -20,6 +20,8 @@ This guide walks you through installing Minikube on Ubuntu 24.04 and setting up 
 
 sudo apt update -y
 
+---
+
 ### 📥 Step 2: Install kubectl
 curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
