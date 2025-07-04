@@ -28,11 +28,9 @@ minikube version
 
 ▶️ Step 4: Start Minikube
 Option 1: Start with Docker (recommended if Docker is installed)
-
 minikube start --driver=docker
 
 Option 2: Start with VirtualBox
-
 minikube start --driver=virtualbox
 
 Tip: Run minikube drivers to see available drivers on your system.
@@ -45,7 +43,7 @@ You should see a running node named minikube.
 🌐 Step 6: Access Minikube Dashboard
 minikube dashboard
 
-This will open the dashboard in your default browser.
+This will open the Kubernetes dashboard in your default browser.
 
 🚩 Step 7: Deploy Argo CD on Minikube
 kubectl create namespace argocd
@@ -54,27 +52,34 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 🚪 Step 8: Access Argo CD UI
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 
-Open browser at: https://localhost:8080
+Open your browser and visit:
+https://localhost:8080
 
 🔑 Step 9: Login to Argo CD
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 
 Username: admin
-Password: (from above command)
+Password: (from the command above)
 
 🛠️ Useful Commands
-Stop cluster: minikube stop
+Stop cluster:
+minikube stop
 
-Delete cluster: minikube delete
+Delete cluster:
+minikube delete
 
-SSH into VM: minikube ssh
+SSH into VM:
+minikube ssh
 
-Get cluster info: kubectl cluster-info
+Get cluster info:
+kubectl cluster-info
 
-View services: minikube service list
+View services:
+minikube service list
 
 🧹 Cleanup (if needed)
 minikube stop
 minikube delete
+minikube dashboard
 
 Maintained by: 👩‍💻 Cinny
