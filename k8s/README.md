@@ -1,4 +1,3 @@
-cat << 'EOF' > README.md
 # Cinny K8s App
 
 This is a simple Kubernetes app deployed via **Argo CD** on **Minikube** using GitOps workflow.
