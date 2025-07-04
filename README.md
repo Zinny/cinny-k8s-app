@@ -1,8 +1,8 @@
-🚀 Minikube Installation Guide (Ubuntu 24.04)
+#🚀 Minikube Installation Guide (Ubuntu 24.04)
 
 This guide walks you through installing Minikube on Ubuntu 24.04 and setting up a local Kubernetes cluster, including the dashboard and Argo CD.
 
-📝 Prerequisites
+##📝 Prerequisites
 
 🖥️ Ubuntu 24.04 LTS (or similar)
 
@@ -17,7 +17,7 @@ This guide walks you through installing Minikube on Ubuntu 24.04 and setting up 
 
 
 
-⚙️ Step 1: Install Dependencies
+##⚙️ Step 1: Install Dependencies
 
 
 sudo apt update -y
@@ -27,7 +27,7 @@ sudo apt install -y curl wget apt-transport-https ca-certificates conntrack
 
 
 
-📥 Step 2: Install kubectl
+##📥 Step 2: Install kubectl
 
 curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
@@ -36,7 +36,7 @@ kubectl version --client
 
 
 
-📦 Step 3: Install Minikube
+##📦 Step 3: Install Minikube
 
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
@@ -45,7 +45,7 @@ minikube version
 
 
 
-▶️ Step 4: Start Minikube
+##▶️ Step 4: Start Minikube
 
 
 Option 1: Start with Docker (recommended if Docker is installed)
@@ -58,12 +58,12 @@ Option 2: Start with VirtualBox
 minikube start --driver=virtualbox
 
 
-💡 Tip: Run minikube drivers to see available drivers on your system.
+##💡 Tip: Run minikube drivers to see available drivers on your system.
 
 
 
 
-🔍 Step 5: Verify Installation
+##🔍 Step 5: Verify Installation
 
 
 
@@ -75,7 +75,7 @@ You should see a running node named minikube.
 
 
 
-🌐 Step 6: Access Minikube Dashboard
+##🌐 Step 6: Access Minikube Dashboard
 
 minikube dashboard
 
@@ -84,7 +84,7 @@ This will open the Kubernetes dashboard in your default browser.
 
 
 
-🚩 Step 7: Deploy Argo CD on Minikube
+##🚩 Step 7: Deploy Argo CD on Minikube
 
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -92,7 +92,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 
 
 
-🚪 Step 8: Access Argo CD UI
+##🚪 Step 8: Access Argo CD UI
 
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 
@@ -100,7 +100,7 @@ Open your browser and visit:https://localhost:8080
 
 
 
-🔑 Step 9: Login to Argo CD
+##🔑 Step 9: Login to Argo CD
 
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 
@@ -111,7 +111,7 @@ Password: (from above command)
 
 
 
-🛠️ Useful Commands
+##🛠️ Useful Commands
 
 
 
@@ -138,7 +138,7 @@ minikube service list
 
 
 
-🧹 Cleanup (if needed)
+##🧹 Cleanup (if needed)
 
 
 minikube stop
