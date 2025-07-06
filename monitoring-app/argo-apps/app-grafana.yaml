@@ -6,7 +6,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/Zinny/cinny-k8s-app/monitoring-app.git'  # change this URL
+    repoURL: 'https://github.com/Zinny/cinny-k8s-app.git'
+    path: monitoring-app/grafana
     targetRevision: HEAD
     path: grafana
     helm:

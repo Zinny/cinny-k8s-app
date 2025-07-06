@@ -1,0 +1,25 @@
+# argocd-prom-stack-rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: argocd-extensions
+rules:
+- apiGroups: ["monitoring.coreos.com"]
+  resources: ["prometheuses", "alertmanagers", "servicemonitors", "prometheusrules"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["integreatly.org", "grafana.integreatly.org"]
+  resources: ["grafanas", "grafanadashboards"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: argocd-extensions
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: argocd-extensions
+subjects:
+- kind: ServiceAccount
+  name: argocd-application-controller
+  namespace: argocd
