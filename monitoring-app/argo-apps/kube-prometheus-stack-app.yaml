@@ -5,43 +5,60 @@ metadata:
   name: kube-prometheus-stack # Name of this Argo CD Application in the UI
   namespace: argocd           # Where Argo CD itself is installed
   annotations:
-    argocd.argoproj.io/sync-wave: "-2" # Syncs before Grafana Operator (-1) and Grafana UI (1)
+    argocd.argoproj.io/sync-wave: "-2" # Ensures it syncs very early.
 spec:
-  project: default
+  project: default # Your Argo CD project name
 
   source:
     repoURL: https://prometheus-community.github.io/helm-charts
     chart: kube-prometheus-stack
-    targetRevision: 58.5.0                                    # <<-- VERIFY THIS VERSION ON ARTIFACT HUB!
+    targetRevision: 75.9.0 # <<< UPDATED TO 75.9.0 based on your check!
+
     helm:
       values: |
+        # Enable CRD management by the chart (default and recommended)
         crds:
           enabled: true
+
+        # --- Prometheus Configuration ---
         prometheus:
           prometheusSpec:
             replicas: 1
             storageSpec:
               volumeClaimTemplate:
                 spec:
-                  storageClassName: standard # Minikube default
+                  storageClassName: standard # Minikube's default. Ensure 'kubectl get sc' shows it.
                   resources:
                     requests:
-                      storage: 10Gi
+                      storage: 10Gi # Adjust size as needed
+
+        # --- Alertmanager Configuration ---
         alertmanager:
-          enabled: true
+          enabled: true # Set to false if you don't need Alertmanager
           alertmanagerSpec:
             replicas: 1
             storage:
               volumeClaimTemplate:
                 spec:
-                  storageClassName: standard
+                  storageClassName: standard # Minikube's default
                   resources:
                     requests:
                       storage: 1Gi
+
+        # --- Grafana Configuration (ENABLED HERE!) ---
         grafana:
-          enabled: false # Set to false if you want to use the Grafana Operator for Grafana UI
-                         # Set to true if you want this chart to deploy Grafana as well.
-                         # If true, you'd configure adminPassword etc. here.
+          enabled: true # Yes, deploy Grafana with Prometheus Stack
+          adminPassword: your-secure-grafana-password # <<< CHANGE THIS TO A REAL, STRONG PASSWORD!
+          service:
+            type: ClusterIP # Use ClusterIP; minikube service or port-forward will expose it.
+            port: 80        # Grafana's service port in K8s
+            targetPort: 3000 # Grafana application's actual port
+          ingress:
+            enabled: false # Keep false for local Minikube unless you have ingress controller setup
+          persistence:
+            enabled: true
+            storageClassName: standard
+            size: 2Gi # Grafana's internal database storage
 
   destination:
     server: https://kubernetes.default.svc
@@ -52,5 +69,5 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
-      - disable-hooks=true # Important for charts with CRDs
+      - CreateNamespace=true # Ensures the 'monitoring' namespace exists
+      - disable-hooks=true   # Important for charts with CRDs and pre/post-sync hooks
