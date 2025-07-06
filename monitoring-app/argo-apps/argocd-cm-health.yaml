@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+data:
+  resource.customizations.health.Grafana: |
+    hs = {}
+    if obj.status ~= nil then
+      if obj.status.phase ~= nil then
+        if obj.status.phase == "Running" then
+          hs.status = "Healthy"
+          hs.message = "Grafana is running"
+          return hs
+        end
+      end
+      if obj.status.conditions ~= nil then
+        for _, condition in ipairs(obj.status.conditions) do
+          if condition.type == "Ready" and condition.status == "True" then
+            hs.status = "Healthy"
+            hs.message = "Grafana is ready"
+            return hs
+          end
+        end
+      end
+    end
+    hs.status = "Progressing"
+    hs.message = "Waiting for Grafana to be ready"
+    return hs
+
+  resource.customizations.health.Prometheus: |
+    hs = {}
+    if obj.status ~= nil and obj.status.conditions ~= nil then
+      for _, condition in ipairs(obj.status.conditions) do
+        if condition.type == "Available" and condition.status == "True" then
+          hs.status = "Healthy"
+          hs.message = "Prometheus is available"
+          return hs
+        end
+      end
+    end
+    hs.status = "Progressing"
+    hs.message = "Waiting for Prometheus to be available"
+    return hs
