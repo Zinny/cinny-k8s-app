@@ -3,15 +3,18 @@ kind: Application
 metadata:
   name: grafana
   namespace: argocd
+  annotations:
+    # Adding sync wave here - crucial for dependency order
+    argocd.argoproj.io/sync-wave: "1" # This app (Grafana UI) syncs AFTER the operator (-1)
 spec:
   project: default
   source:
     repoURL: 'https://github.com/Zinny/cinny-k8s-app.git'
     targetRevision: HEAD
     path: monitoring-app/grafana
-    helm:
-      valueFiles:
-        - values.yaml
+    #helm:
+    #  valueFiles:
+    #    - values.yaml
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: monitoring
