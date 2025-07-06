@@ -1,16 +1,11 @@
-# Example grafana-instance.yaml in your Git repo (monitoring-app/grafana/)
-apiVersion: grafana.integreatly.org/v1beta1 # Check this API version with Grafana Operator docs if unsure
+apiVersion: grafana.grafana.integreatly.org/v1beta1
 kind: Grafana
 metadata:
-  name: my-grafana-instance  # This is the name your Grafana service and deployment will be based on
-  namespace: monitoring     # The namespace where Grafana UI will be deployed
+  name: my-grafana-instance
+  namespace: monitoring
 spec:
+  ingress:
+    enabled: false
   config:
-    security:
-      admin_user: admin
-      admin_password: your-desired-admin-password # **Change this to a strong password!**
-  deployment:
-    replicas: 1
-  service:
-    type: ClusterIP # Or NodePort if you want direct Minikube IP:Port access
-    port: 3000
+    log:
+      level: info
