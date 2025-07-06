@@ -1,0 +1,56 @@
+# File: ~/cinny-k8s-app/monitoring-app/argo-apps/kube-prometheus-stack-app.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack # Name of this Argo CD Application in the UI
+  namespace: argocd           # Where Argo CD itself is installed
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2" # Syncs before Grafana Operator (-1) and Grafana UI (1)
+spec:
+  project: default
+
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    targetRevision: 58.5.0                                    # <<-- VERIFY THIS VERSION ON ARTIFACT HUB!
+    helm:
+      values: |
+        crds:
+          enabled: true
+        prometheus:
+          prometheusSpec:
+            replicas: 1
+            storageSpec:
+              volumeClaimTemplate:
+                spec:
+                  storageClassName: standard # Minikube default
+                  resources:
+                    requests:
+                      storage: 10Gi
+        alertmanager:
+          enabled: true
+          alertmanagerSpec:
+            replicas: 1
+            storage:
+              volumeClaimTemplate:
+                spec:
+                  storageClassName: standard
+                  resources:
+                    requests:
+                      storage: 1Gi
+        grafana:
+          enabled: false # Set to false if you want to use the Grafana Operator for Grafana UI
+                         # Set to true if you want this chart to deploy Grafana as well.
+                         # If true, you'd configure adminPassword etc. here.
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring # Argo CD will create this namespace
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - disable-hooks=true # Important for charts with CRDs
